@@ -1,3 +1,4 @@
+import 'package:bloodbank/view/home_cycle/home/donation_screen.dart';
 import 'package:bloodbank/widget/constants.dart';
 import 'package:bloodbank/widget/text_field_profile.dart';
 import 'package:flutter/material.dart';
@@ -33,23 +34,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final datePickerController = TextEditingController();
   DateTime selectedDate2 = DateTime.now();
   final datePickerController2 = TextEditingController();
+  var moonLanding = DateTime.parse("1969-07-20"); // 8:18pm
+  String birthDate = 'BirthDate';
 
-  String selectedItemBloodType;
-  String selectedItemCity;
-  String selectedItemRegion;
-  final List<String> bloodType = [
+//  dateFormate = DateFormat("dd-MM-yyyy").format(DateTime.parse("2019-09-30"));
+  String selectedItemBloodType = 'BloodType';
+  String selectedItemCity = 'City';
+  String selectedItemRegion = 'Region';
+  final List bloodTypeList = [
     'A',
     'A+',
     'B',
     'B+',
   ];
-  final List<String> city = [
+  final List<String> cityList = [
     'giza',
     'cairo',
     'alex',
     'aswan',
   ];
-  final List<String> region = [
+  final List<String> regionList = [
     'haram',
     'faisal',
     'omraneya',
@@ -85,7 +89,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       textInputType: TextInputType.emailAddress,
                     ),
                     SizedBox(height: 10),
-                    CustomProfileContainer(
+                    CustomProfileContainer(2
                       startIcon: Icons.date_range,
                       spinnerWidget: Text(
                         datePickerController.text.isEmpty
@@ -98,6 +102,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 : Colors.black),
                       ),
                       onTap: () {
+//                        var dateSlug =
+//                            "${selectedDate.year.toString()}-${selectedDate.month.toString().padLeft(2, '0')}-${selectedDate.day.toString().padLeft(2, '0')}";
+//                        print(dateSlug);
                         _selectDateAndroid(
                             context, selectedDate, datePickerController);
                       },
@@ -105,7 +112,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     SizedBox(height: 10),
                     CustomProfileContainer(
                       startIcon: Icons.do_not_disturb_alt,
-                      spinnerWidget: androidDropdownBloodType(),
+                      spinnerWidget: CustomDropDown(
+                        list: cityList,
+                        hint: selectedItemBloodType,
+                        icon: Icon(
+                          Icons.arrow_downward,
+                          color: Colors.transparent,
+                        ),
+                        onChange: (value) {
+                          setState(() {
+                            selectedItemBloodType = value;
+                          });
+                        },
+                      ),
                       endIcon: Icons.arrow_downward,
                     ),
                     SizedBox(height: 10),
@@ -129,13 +148,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     SizedBox(height: 10),
                     CustomProfileContainer(
                       startIcon: Icons.home,
-                      spinnerWidget: androidDropdownCity(),
+                      spinnerWidget: CustomDropDown(
+                        list: cityList,
+                        hint: selectedItemCity,
+                        icon: Icon(
+                          Icons.arrow_downward,
+                          color: Colors.transparent,
+                        ),
+                        onChange: (value) {
+                          setState(() {
+                            selectedItemCity = value;
+                          });
+                        },
+                      ),
                       endIcon: Icons.arrow_downward,
                     ),
                     SizedBox(height: 10),
                     CustomProfileContainer(
                       startIcon: Icons.home,
-                      spinnerWidget: androidDropdownRegion(region, 'region'),
+                      spinnerWidget: CustomDropDown(
+                        list: regionList,
+                        hint: selectedItemRegion,
+                        icon: Icon(
+                          Icons.arrow_downward,
+                          color: Colors.transparent,
+                        ),
+                        onChange: (value) {
+                          setState(() {
+                            selectedItemRegion = value;
+                          });
+                        },
+                      ),
                       endIcon: Icons.arrow_downward,
                     ),
                     SizedBox(height: 10),
@@ -183,96 +226,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Future<Null> _selectDateAndroid(BuildContext context, DateTime selectedDate,
       TextEditingController datePickerController) async {
     final DateTime picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2101));
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(2015, 8),
+      lastDate: DateTime(2101),
+    );
     if (picked != null && picked != selectedDate)
       setState(() {
         selectedDate = picked;
         datePickerController.text = selectedDate.toString();
       });
-  }
-
-  DropdownButton<String> androidDropdownBloodType() {
-    List<DropdownMenuItem<String>> dropDownItems = [];
-    for (String item in bloodType) {
-      var newItem = DropdownMenuItem(
-        child: Text(
-          item,
-          style: TextStyle(color: Colors.red[900]),
-        ),
-        value: item,
-      );
-      dropDownItems.add(newItem);
-    }
-    return DropdownButton<String>(
-        underline: SizedBox(),
-        iconEnabledColor: Colors.transparent,
-        hint: Text('BloodType', style: TextStyle(color: Colors.red[900])),
-        dropdownColor: Colors.grey[300],
-        value: selectedItemBloodType,
-        items: dropDownItems,
-        isExpanded: true,
-        onChanged: (value) {
-          setState(() {
-            selectedItemBloodType = value;
-          });
-        });
-  }
-
-  DropdownButton<String> androidDropdownCity() {
-    List<DropdownMenuItem<String>> dropDownItems = [];
-    for (String item in city) {
-      var newItem = DropdownMenuItem(
-        child: Text(
-          item,
-          style: TextStyle(color: Colors.red[900]),
-        ),
-        value: item,
-      );
-      dropDownItems.add(newItem);
-    }
-    return DropdownButton<String>(
-        underline: SizedBox(),
-        iconEnabledColor: Colors.transparent,
-        hint: Text('City', style: TextStyle(color: Colors.red[900])),
-        dropdownColor: Colors.grey[300],
-        value: selectedItemCity,
-        items: dropDownItems,
-        isExpanded: true,
-        onChanged: (value) {
-          setState(() {
-            selectedItemCity = value;
-          });
-        });
-  }
-
-  DropdownButton<String> androidDropdownRegion(List<String> list, String hint) {
-    List<DropdownMenuItem<String>> dropDownItems = [];
-    for (String item in list) {
-      var newItem = DropdownMenuItem(
-        child: Text(
-          item,
-          style: TextStyle(color: Colors.red[900]),
-        ),
-        value: item,
-      );
-      dropDownItems.add(newItem);
-    }
-    return DropdownButton<String>(
-        underline: SizedBox(),
-        iconEnabledColor: Colors.transparent,
-        hint: Text(hint, style: TextStyle(color: Colors.red[900])),
-        dropdownColor: Colors.grey[300],
-        value: selectedItemRegion,
-        items: dropDownItems,
-        isExpanded: true,
-        onChanged: (value) {
-          setState(() {
-            selectedItemRegion = value;
-          });
-        });
   }
 }
 

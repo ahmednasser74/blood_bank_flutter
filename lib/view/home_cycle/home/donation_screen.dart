@@ -5,21 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class Photo {
-  final String title;
-  final String thumbnailUrl;
-
-  Photo(this.title, this.thumbnailUrl);
-
-  factory Photo.fromJson(Map<String, dynamic> json) {
-    return Photo(json["title"], json["thumbnailUrl"]);
-  }
-
-  static List<Photo> parseList(List<dynamic> list) {
-    return list.map((i) => Photo.fromJson(i)).toList();
-  }
-}
-
 class DonationScreen extends StatefulWidget {
   static const String id = 'donation_screen';
 
@@ -29,18 +14,16 @@ class DonationScreen extends StatefulWidget {
 
 class _DonationScreenState extends State<DonationScreen> {
   List data;
-  ScrollController _scrollController = ScrollController();
-  int _pageNumber;
+
   String bloodType = 'hint';
 
-  Future<void> fetchPhotos() async {
-//    try {
+  Future<void> fetchData() async {
     String url =
-        'http://ipda3-tech.com/blood-bank/api/v1/donation-requests?api_token=W4mx3VMIWetLcvEcyF554CfxjZHwdtQldbdlCl2XAaBTDIpNjKO1f7CHuwKl&page=$_pageNumber';
+        'http://ipda3-tech.com/blood-bank/api/v1/donation-requests?api_token=W4mx3VMIWetLcvEcyF554CfxjZHwdtQldbdlCl2XAaBTDIpNjKO1f7CHuwKl&page=1';
     http.Response response = await http.get(url);
-    var extractData = jsonDecode(response.body);
     if (response.statusCode == 200) {
       setState(() {
+        var extractData = jsonDecode(response.body);
         data = extractData['data']['data'];
       });
     } else {
@@ -49,12 +32,13 @@ class _DonationScreenState extends State<DonationScreen> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-    _scrollController.dispose();
+  void initState() {
+    super.initState();
+    this.fetchData();
   }
 
-  String dropdownValue = 'الوقاية';
+  String dropdownValueBloodType ='City';
+  String dropdownValueCity ='BloodType';
   List bloodTypeList = [
     'o',
     'd',
@@ -63,6 +47,12 @@ class _DonationScreenState extends State<DonationScreen> {
     'b',
   ];
 
+  List cityList = [
+    'cairo',
+    'giza',
+    'alex',
+    'aswan',
+  ];
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -74,9 +64,8 @@ class _DonationScreenState extends State<DonationScreen> {
         body: Column(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Expanded(
                     child: Container(
@@ -87,9 +76,15 @@ class _DonationScreenState extends State<DonationScreen> {
                       child: Center(
                         child: CustomDropDown(
                           list: bloodTypeList,
-                          hint: dropdownValue,
+                          hint: dropdownValueCity,
+                          icon: Icon(
+                            Icons.arrow_downward,
+                            color: Colors.red[900],
+                          ),
                           onChange: (value) {
-                            dropdownValue = value;
+                            setState(() {
+                              dropdownValueCity = value;
+                            });
                           },
                         ),
                       ),
@@ -106,10 +101,16 @@ class _DonationScreenState extends State<DonationScreen> {
                       ),
                       child: Center(
                         child: CustomDropDown(
-                          list: bloodTypeList,
-                          hint: 'hint',
+                          list: cityList,
+                          hint: dropdownValueBloodType,
+                          icon: Icon(
+                            Icons.arrow_downward,
+                            color: Colors.red[900],
+                          ),
                           onChange: (value) {
-                            dropdownValue = value;
+                            setState(() {
+                              dropdownValueBloodType = value;
+                            });
                           },
                         ),
                       ),
@@ -126,7 +127,7 @@ class _DonationScreenState extends State<DonationScreen> {
                       ),
                     )
                   : ListView.builder(
-                      controller: _scrollController,
+                      itemCount: data == null ? 0 : data.length,
                       shrinkWrap: true, // use this
                       itemBuilder: (context, index) {
                         return DonationItem(
@@ -165,30 +166,36 @@ class _DonationScreenState extends State<DonationScreen> {
 }
 
 class CustomDropDown extends StatelessWidget {
-  final List<String> list;
+  final List list;
   final Function onChange;
   final String hint;
   final Icon icon;
+  final String value;
 
-  CustomDropDown({this.list, this.onChange, this.hint, this.icon});
+  CustomDropDown({this.list, this.onChange, this.hint, this.icon,this.value});
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButton<String>(
-      value: null,
-      icon: Icon(Icons.arrow_downward),
-      iconSize: 24,
-      elevation: 16,
-      style: TextStyle(color: Colors.deepPurple),
+    return DropdownButton(
+      hint: Text(
+        hint,
+        style: TextStyle(color: Colors.red[900], fontSize: 18),
+      ),
       underline: SizedBox(),
+      value: null,
+      icon: icon,
+      iconSize: 24,
+      style: TextStyle(color: Colors.red[900]),
       onChanged: onChange,
       items: list
-          .map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
+          .map((value) => DropdownMenuItem(
+                child: Text(
+                  value,
+                  style: TextStyle(color: Colors.red[900],fontSize: 18),
+                ),
+                value: value,
+              ))
+          .toList(),
     );
   }
 }
