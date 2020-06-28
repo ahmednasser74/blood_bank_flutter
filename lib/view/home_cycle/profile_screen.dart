@@ -89,7 +89,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       textInputType: TextInputType.emailAddress,
                     ),
                     SizedBox(height: 10),
-                    CustomProfileContainer(2
+                    CustomProfileContainer(
                       startIcon: Icons.date_range,
                       spinnerWidget: Text(
                         datePickerController.text.isEmpty
