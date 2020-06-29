@@ -176,7 +176,7 @@ class CustomDropDown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButton(
+    return DropdownButton<String>(
       hint: Text(
         hint,
         style: TextStyle(color: Colors.red[900], fontSize: 18),
@@ -187,8 +187,7 @@ class CustomDropDown extends StatelessWidget {
       iconSize: 24,
       style: TextStyle(color: Colors.red[900]),
       onChanged: onChange,
-      items: list
-          .map((value) => DropdownMenuItem(
+      items: list.map((value) => DropdownMenuItem<String>(
                 child: Text(
                   value,
                   style: TextStyle(color: Colors.red[900],fontSize: 18),

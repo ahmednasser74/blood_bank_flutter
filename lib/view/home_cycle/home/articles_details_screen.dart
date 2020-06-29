@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 class ArticlesDetailsScreen extends StatefulWidget {
   static const id = 'articles_details_screen';
 

@@ -20,14 +20,13 @@ class LoginData {
     data = jsonDecode(response.body);
     var stat = response.statusCode;
     status = data['msg'];
-    print('login data : $data');
-    print('login json status : ${response.statusCode}');
     try {
-      if (data = null) {
+      if (status == 'بيانات الدخول غير صحيحة') {
         print('failed login');
       } else {
-        token = data['data']['api_token'];
+        String token = data['data']['api_token'];
         print('token is : $token');
+        _save(token);
       }
     } catch (e) {
       print('error Login: ${throw Exception(e)}');

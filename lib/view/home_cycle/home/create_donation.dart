@@ -1,7 +1,10 @@
+import 'package:bloodbank/view/home_cycle/home/donation_screen.dart';
 import 'package:bloodbank/view/home_cycle/home/map_screen.dart';
 import 'package:bloodbank/view/home_cycle/profile_screen.dart';
 import 'package:bloodbank/widget/text_field_profile.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class CreateDonationScreen extends StatefulWidget {
   static const String id = 'create_donation_scree';
@@ -20,6 +23,47 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
   String selectedItemCity;
   String selectedItemRegion;
   String hospitalLocation = 'Hospital Location';
+
+  List bloodTypeList = List();
+  List cityList = List();
+  List regionList = List();
+  static int cityId;
+  String bloodTypeUrl = 'http://ipda3-tech.com/blood-bank/api/v1/blood-types';
+  String cityUrl = 'http://ipda3-tech.com/blood-bank/api/v1/governorates';
+  String regionUrl =
+      'http://ipda3-tech.com/blood-bank/api/v1/cities?governorate';
+
+  Future<String> bloodTypeData() async {
+    http.Response response = await http.get(bloodTypeUrl);
+    var responseBody = jsonDecode(response.body);
+    setState(() {
+      bloodTypeList = responseBody['data'];
+    });
+  }
+
+  Future<String> cityData() async {
+    http.Response response = await http.get(cityUrl);
+    var responseBody = jsonDecode(response.body);
+    setState(() {
+      cityList = responseBody['data'];
+    });
+  }
+
+  Future<String> regionData() async {
+    http.Response response = await http.get(regionUrl);
+    var responseBody = jsonDecode(response.body);
+    setState(() {
+      regionList = responseBody['data'];
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    this.bloodTypeData();
+    this.cityData();
+    this.regionData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +97,27 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                     ),
                     SizedBox(height: 10),
                     CustomProfileContainer(
-                      spinnerWidget: androidDropdownBloodType(),
+                      spinnerWidget: DropdownButton(
+                        underline: SizedBox(),
+                        items: bloodTypeList.map((item) {
+                          return DropdownMenuItem(
+                            child: Text(item['name']),
+                            value: item['id'].toString(),
+                          );
+                        }).toList(),
+                        value: selectedItemBloodType,
+                        hint: Text('Blood Type'),
+                        icon: Icon(
+                          Icons.arrow_downward,
+                          color: Colors.transparent,
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            selectedItemBloodType = value;
+                            bloodTypeData();
+                          });
+                        },
+                      ),
                       endIcon: Icons.arrow_downward,
                     ),
                     SizedBox(height: 10),
@@ -74,7 +138,6 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                             builder: (context) => GoogleMapHospital(),
                           ),
                         );
-                        print('location ====${location.position.latitude}');
                         setState(() {
                           hospitalLocation = location.name;
                         });
@@ -83,13 +146,49 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                     ),
                     SizedBox(height: 10),
                     CustomProfileContainer(
-                      spinnerWidget: androidDropdownCity(),
+                      spinnerWidget: DropdownButton(
+                        underline: SizedBox(),
+                        items: cityList.map((item) {
+                          return DropdownMenuItem(
+                            child: Text(item['name']),
+                            value: item['id'].toString(),
+                          );
+                        }).toList(),
+                        value: selectedItemCity,
+                        hint: Text('City'),
+                        icon: SizedBox(),
+                        onChanged: (value) {
+                          setState(() {
+                            selectedItemCity = value;
+                            cityData();
+                          });
+                        },
+                      ),
                       endIcon: Icons.arrow_downward,
                     ),
                     SizedBox(height: 10),
                     CustomProfileContainer(
-                      spinnerWidget:
-                          androidDropdownRegion(ProfileScreen.region, 'region'),
+                      spinnerWidget: DropdownButton(
+                        underline: SizedBox(),
+                        items: regionList.map((item) {
+                          return DropdownMenuItem(
+                            child: Text(item['name']),
+                            value: item['id'].toString(),
+                          );
+                        }).toList(),
+                        value: selectedItemRegion,
+                        hint: Text('Region'),
+                        icon: Icon(
+                          Icons.arrow_downward,
+                          color: Colors.transparent,
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            selectedItemRegion = value;
+                            regionData();
+                          });
+                        },
+                      ),
                       endIcon: Icons.arrow_downward,
                     ),
                     SizedBox(height: 10),
@@ -139,86 +238,5 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
         selectedDate = picked;
         datePickerController.text = selectedDate.toString();
       });
-  }
-
-  DropdownButton<String> androidDropdownBloodType() {
-    List<DropdownMenuItem<String>> dropDownItems = [];
-    for (String item in ProfileScreen.bloodType) {
-      var newItem = DropdownMenuItem(
-        child: Text(
-          item,
-          style: TextStyle(color: Colors.red[900]),
-        ),
-        value: item,
-      );
-      dropDownItems.add(newItem);
-    }
-    return DropdownButton<String>(
-        underline: SizedBox(),
-        iconEnabledColor: Colors.transparent,
-        hint: Text('BloodType', style: TextStyle(color: Colors.red[900])),
-        dropdownColor: Colors.grey[300],
-        value: selectedItemBloodType,
-        items: dropDownItems,
-        isExpanded: true,
-        onChanged: (value) {
-          setState(() {
-            selectedItemBloodType = value;
-          });
-        });
-  }
-
-  DropdownButton<String> androidDropdownCity() {
-    List<DropdownMenuItem<String>> dropDownItems = [];
-    for (String item in ProfileScreen.city) {
-      var newItem = DropdownMenuItem(
-        child: Text(
-          item,
-          style: TextStyle(color: Colors.red[900]),
-        ),
-        value: item,
-      );
-      dropDownItems.add(newItem);
-    }
-    return DropdownButton<String>(
-        underline: SizedBox(),
-        iconEnabledColor: Colors.transparent,
-        hint: Text('City', style: TextStyle(color: Colors.red[900])),
-        dropdownColor: Colors.grey[300],
-        value: selectedItemCity,
-        items: dropDownItems,
-        isExpanded: true,
-        onChanged: (value) {
-          setState(() {
-            selectedItemCity = value;
-          });
-        });
-  }
-
-  DropdownButton<String> androidDropdownRegion(List<String> list, String hint) {
-    List<DropdownMenuItem<String>> dropDownItems = [];
-    for (String item in list) {
-      var newItem = DropdownMenuItem(
-        child: Text(
-          item,
-          style: TextStyle(color: Colors.red[900]),
-        ),
-        value: item,
-      );
-      dropDownItems.add(newItem);
-    }
-    return DropdownButton<String>(
-        underline: SizedBox(),
-        iconEnabledColor: Colors.transparent,
-        hint: Text(hint, style: TextStyle(color: Colors.red[900])),
-        dropdownColor: Colors.grey[300],
-        value: selectedItemRegion,
-        items: dropDownItems,
-        isExpanded: true,
-        onChanged: (value) {
-          setState(() {
-            selectedItemRegion = value;
-          });
-        });
   }
 }

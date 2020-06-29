@@ -50,6 +50,7 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                 child: Container(
+                  height: MediaQuery.of(context).size.height*.09,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(30),
                       color: Colors.grey[300]),
@@ -145,19 +146,6 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
               ),
             ],
           ),
-        ),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => CreateDonationScreen(),
-              ),
-            );
-          },
-          label: Text('Donate'),
-          icon: Icon(Icons.add),
-          backgroundColor: Colors.red[900],
         ),
       ),
     );

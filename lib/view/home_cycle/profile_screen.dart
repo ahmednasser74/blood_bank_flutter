@@ -113,7 +113,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     CustomProfileContainer(
                       startIcon: Icons.do_not_disturb_alt,
                       spinnerWidget: CustomDropDown(
-                        list: cityList,
+                        list: bloodTypeList,
                         hint: selectedItemBloodType,
                         icon: Icon(
                           Icons.arrow_downward,

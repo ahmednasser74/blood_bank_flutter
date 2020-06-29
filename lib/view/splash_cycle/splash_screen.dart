@@ -31,6 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             Expanded(
+              flex: 2,
               child: Stack(
                 children: <Widget>[
                   Positioned(
@@ -41,16 +42,19 @@ class _SplashScreenState extends State<SplashScreen> {
                 ],
               ),
             ),
-            Container(
-              transform: Matrix4.translationValues(0.0, -20.0, 0.0),
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 20),
-                  child: Image.asset("images/red_logo.png"),
+            Expanded(
+              child: Container(
+                transform: Matrix4.translationValues(0.0, -20.0, 0.0),
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 20),
+                    child: Image.asset("images/red_logo.png"),
+                  ),
                 ),
               ),
             ),
             Expanded(
+              flex: 2,
               child: Stack(
                 alignment: Alignment.topCenter,
                 children: <Widget>[
