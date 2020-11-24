@@ -1,7 +1,6 @@
 # bloodbank
 
-A new Flutter application.
-
+application helps the community with medical service for blood donation and give donor chance to accept donation request from patient close to his location with all privce for both
 ## Getting Started
 
 This project is a starting point for a Flutter application.
