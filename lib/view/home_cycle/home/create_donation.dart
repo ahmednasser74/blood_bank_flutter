@@ -1,4 +1,3 @@
-import 'package:bloodbank/view/home_cycle/home/donation_screen.dart';
 import 'package:bloodbank/view/home_cycle/home/map_screen.dart';
 import 'package:bloodbank/view/home_cycle/profile_screen.dart';
 import 'package:bloodbank/widget/text_field_profile.dart';
@@ -27,7 +26,6 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
   List bloodTypeList = List();
   List cityList = List();
   List regionList = List();
-  static int cityId;
   String bloodTypeUrl = 'http://ipda3-tech.com/blood-bank/api/v1/blood-types';
   String cityUrl = 'http://ipda3-tech.com/blood-bank/api/v1/governorates';
   String regionUrl =
@@ -226,7 +224,7 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
     );
   }
 
-  Future<Null> _selectDateAndroid(BuildContext context, DateTime selectedDate,
+  Future selectDateAndroid(BuildContext context, DateTime selectedDate,
       TextEditingController datePickerController) async {
     final DateTime picked = await showDatePicker(
         context: context,

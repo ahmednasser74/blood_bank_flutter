@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'articles_details_screen.dart';
-import 'create_donation.dart';
 
 class ArticlesScreen extends StatefulWidget {
   static const String id = 'articles_screen';

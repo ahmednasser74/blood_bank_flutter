@@ -140,8 +140,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                   children: <Widget>[
                                     SvgPicture.asset(
                                       "images/warning.svg",
-                                      height: 20.0,
-                                      width: 20.0,
+                                      height: 25.0,
+                                      width: 25.0,
                                     ),
                                     Text('Forget Password',
                                         style: TextStyle(
@@ -152,7 +152,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 Text(msgStatus,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                        fontSize: 20,
+                                        fontSize: 25,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white)),
                               ],
@@ -163,7 +163,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     ButtonTheme(
                       minWidth: double.infinity,
-                      height: MediaQuery.of(context).size.height * .06,
+                      height: MediaQuery.of(context).size.height * .08,
                       child: FlatButton(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.only(

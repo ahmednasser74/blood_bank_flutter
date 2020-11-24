@@ -29,7 +29,7 @@ class _SliderScreen extends State<SliderScreen> {
   int slideIndex = 0;
   PageController controller;
 
-  Widget _buildPageIndicator(bool isCurrentPage) {
+  Widget buildPageIndicator(bool isCurrentPage) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 2.0),
       height: isCurrentPage ? 10.0 : 6.0,
@@ -69,7 +69,7 @@ class _SliderScreen extends State<SliderScreen> {
                   children: <Widget>[
                     Image.asset('images/slide1.png'),
                     Text(
-                      'hello world my shramet',
+                      'welcome screen 1',
                       style: TextStyle(color: Colors.black, fontSize: 30),
                     )
                   ],
@@ -78,7 +78,7 @@ class _SliderScreen extends State<SliderScreen> {
                   children: <Widget>[
                     Image.asset('images/slide2.png'),
                     Text(
-                      'hello world my shramet 2',
+                      'welcome screen 2',
                       style: TextStyle(color: Colors.black, fontSize: 30),
                     )
                   ],
@@ -87,7 +87,7 @@ class _SliderScreen extends State<SliderScreen> {
                   children: <Widget>[
                     Image.asset('images/slide3.png'),
                     Text(
-                      'hello world my shramet 3',
+                      'welcome screen 3',
                       style: TextStyle(color: Colors.black, fontSize: 30),
                     )
                   ],
@@ -129,8 +129,9 @@ class _SliderScreen extends State<SliderScreen> {
                       children: [
                         for (int i = 0; i < 3; i++)
                           i == slideIndex
-                              ? _buildPageIndicator(true)
-                              : _buildPageIndicator(false)
+                              ? buildPageIndicator(true)
+                              : buildPageIndicator(false)
+
                       ],
                     ),
                   ),

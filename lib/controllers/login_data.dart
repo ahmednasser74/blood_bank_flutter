@@ -18,7 +18,7 @@ class LoginData {
     });
 
     data = jsonDecode(response.body);
-    var stat = response.statusCode;
+//    var stat = response.statusCode;
     status = data['msg'];
     try {
       if (status == 'بيانات الدخول غير صحيحة') {

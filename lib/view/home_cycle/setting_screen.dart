@@ -10,7 +10,7 @@ class SettingScreen extends StatelessWidget {
 
   final TextStyle textStyle =
       TextStyle(color: Colors.red[900], fontWeight: FontWeight.bold);
-  RoundedRectangleBorder dialogRoundedButton = RoundedRectangleBorder(
+  final RoundedRectangleBorder dialogRoundedButton = RoundedRectangleBorder(
     borderRadius: BorderRadius.circular(20.0),
     side: BorderSide(color: Colors.black),
   );
@@ -163,7 +163,7 @@ class CustomCardWidget extends StatelessWidget {
               ),
               Text(
                 title,
-                style: TextStyle(fontSize: 20),
+                style: TextStyle(fontSize: 8),
               ),
             ],
           ),
